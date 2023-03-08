@@ -1,7 +1,8 @@
 #include <iostream>
 using namespace std;
 
-/*char *removeSentence(char *Para, char *input) {
+char *removeSentence(char *Para, char *input) {
+  bool spaces;
   char *storePara = Para;
   char *storeInput = input;
   int paraLen = 0;
@@ -28,21 +29,38 @@ using namespace std;
       inputOrigin++;
       storeInput++;
       testCount++;
+      if (*storeInput == '\0')
+        break;
     }
+    if (*storeInput == '\0')
+      break;
   }
   char *tempPara = new char[paraLen];
   for (int i = 0; i < paraLen; i++)
     *(tempPara + i) = *(Para + i);
   paraLen -= inputLen;
-  for (int i = (storeInput - storePara - inputLen - 1); i < paraLen; i++) {
-    *(tempPara + i) = *(tempPara + i + inputLen + 1);
+  int i = storeInput - storePara - inputLen;
+  for (i; i < paraLen; i++) {
+    if ((*(tempPara + i + inputLen) == ' ') && *(tempPara + i - 1) == ' ') {
+      spaces = true;
+    }
+    if (spaces)
+      *(tempPara + i - 1) = *(tempPara + i + inputLen);
+    else
+      *(tempPara + i) = *(tempPara + i + inputLen);
   }
+
+  if (spaces)
+    paraLen--;
+
   *(tempPara + paraLen) = '\0';
 
-  return tempPara;
-}*/
+  char *storeTemp = tempPara;
 
-/*bool FindSubString(char *Str, char *substr, int &start, int &end) {
+  return tempPara;
+}
+
+bool FindSubString(char *Str, char *substr, int &start, int &end) {
   char *count = substr, *iterateStr = Str, *iterateSubStr = substr;
   while (*count != '\0')
     count++;
@@ -109,11 +127,11 @@ using namespace std;
     end = end - start - 1;
   }
   return subStrFound;
-}*/
+}
 
 // Q2, 50 MARKS. I LOVE THIS QUESTION!
 
-/* char ***ConvertToDynamic(char arr[], int x, int y, int z) {
+char ***ConvertToDynamic(char arr[], int x, int y, int z) {
   // Allocating
   char ***fastIsTheBest = new char **[x];
   for (int i = 0; i < x; i++) {
@@ -203,8 +221,9 @@ bool MatchString3DArray(char ***mat, int xSize, int ySize, int zSize,
                   yDiff = j - *(yLoc);
                   zDiff = k - *(zLoc);
                 }
-                if (checkLegality(xSize, ySize, zSize, *(xLoc + curChar - 1), *(yLoc + curChar - 1),
-                                  *(zLoc + curChar - 1), i, j, k, xDiff, yDiff, zDiff)) {
+                if (checkLegality(xSize, ySize, zSize, *(xLoc + curChar - 1),
+                                  *(yLoc + curChar - 1), *(zLoc + curChar - 1),
+                                  i, j, k, xDiff, yDiff, zDiff)) {
                   *(xLoc + curChar) = i;
                   *(yLoc + curChar) = j;
                   *(zLoc + curChar) = k;
@@ -252,7 +271,7 @@ bool MatchString3DArray(char ***mat, int xSize, int ySize, int zSize,
     }
     if (stringFound) {
 
-      resultMat = new int * [3];
+      resultMat = new int *[3];
       for (int i = 0; i < 3; i++)
         resultMat[i] = new int[colSize];
       // The row size will always be 3 since this is a 3d array.
@@ -284,9 +303,7 @@ bool MatchString3DArray(char ***mat, int xSize, int ySize, int zSize,
       yInd = *(yLoc + curChar);
       zInd = *(zLoc + curChar);
       checkedFinalChar = 1;
-    }
-    else if (!stringFound && atFinalIndex)
-    {
+    } else if (!stringFound && atFinalIndex) {
       curChar--;
       xInd = *(xLoc + curChar);
       yInd = *(yLoc + curChar);
@@ -299,7 +316,6 @@ bool MatchString3DArray(char ***mat, int xSize, int ySize, int zSize,
         xInd++;
       else
         break;
-
     }
     if (!stringFound && atFinalIndex && curChar < 0) {
       break;
@@ -311,23 +327,22 @@ bool MatchString3DArray(char ***mat, int xSize, int ySize, int zSize,
   return 0;
 }
 
-void DeleteArray(char***& arr, int x, int y, int z)
-{
-  for (int i = 0; i < x; i++)
-  {
-    for (int j = 0; j < y; j++)
-    {
+void DeleteArray(char ***&arr, int x, int y, int z) {
+  for (int i = 0; i < x; i++) {
+    for (int j = 0; j < y; j++) {
       delete[] arr[i][j];
     }
     delete[] arr[i];
   }
   delete[] arr;
   arr = NULL;
-} */
+}
+
 // Q3 part 1, recursive perfect number (10 marks)
 
 // Calculating the sum of every divisor of the number
-/*int sumDivisors(int n, int i) {
+
+int sumDivisors(int n, int i) {
   if (i == 1)
     return 1;
   if (i > 1) {
@@ -346,150 +361,187 @@ bool isperfectNumber(int n) {
   if ((n % sum == 0 && sum != 1))
     return 1;
   return 0;
-}*/
+}
 
 // Q3 part 2, finding vowels (10 marks)
 
-/* int findVowels(char *str) {
+int findVowels(char *str) {
   if (*str == '\0')
     return 0;
-  if (*str == 'a' || *str == 'e' || *str == 'o' || *str == 'u' || *str ==
-'i') return 1 + findVowels(str + 1); return findVowels(str + 1);
-} */
+  if (*str == 'a' || *str == 'e' || *str == 'o' || *str == 'u' || *str == 'i')
+    return 1 + findVowels(str + 1);
+  return findVowels(str + 1);
+}
 
 // Q3 part 3, pascal triangle
 
-/*int pascal(int row, int col) {
+int pascal(int row, int col) {
   if (col > row || col < 0)
     return 0;
   if (row <= 1)
     return 1;
   return pascal(row - 1, col - 1) + pascal(row - 1, col);
-}*/
+}
 
 // Q3 part 4, pattern printing
 
-/* void printSpace(int n, int n2)
-{
+void printSpace(int n, int n2) {
   if (n <= n2)
     return;
   printSpace(n - 1, n2);
   cout << "  ";
 }
 
-void printPat(int n, int max)
-{
+void printPat(int n, int max) {
   if (n <= 0)
     return;
   printSpace(n - 1, n / 2);
   cout << '*' << endl;
   printPat(n - 2, max);
 
-  if (max % 2 == 0)
-  {
+  if (max % 2 == 0) {
     printSpace(n, n / 2);
     if (n == max)
       return;
     cout << '*' << endl;
-  }
-  else
-  {
+  } else {
     printSpace(n - 1, n / 2);
     cout << '*' << endl;
   }
 }
 
-void PrintPattern1(int start, int end)
-{
+void PrintPattern1(int start, int end) {
   // Start is always gonna be one so I won't even bother
 
   printPat(end, end);
-} */
+}
 
 // Q3 part 5, print diamond
 
-void printSpaces(int n)
-{
+void printSpaces(int n) {
   if (n == 0)
     return;
   cout << ' ';
   printSpaces(n - 1);
 }
 
-void printStars(int n, int track)
-{
+void printStars(int n) {
   if (n == 0)
     return;
   cout << '*';
-  printStars(n - 1, track);
+  printStars(n - 1);
 }
 
-void printDiamond(int n, int track)
-{
+void printDiamond(int n, int track) {
   if (n <= 1)
     return;
 
-  printStars(n - 1, track);
+  printStars(n - 1);
   printSpaces((track - n) * 2);
-  printStars(n - 1, track);
+  printStars(n - 1);
   cout << '\n';
 
   printDiamond(n - 1, track);
 
   if (n >= 3)
     cout << '\n';
-  printStars(n - 1, track);
+  printStars(n - 1);
   printSpaces((track - n) * 2);
-  printStars(n - 1, track);
+  printStars(n - 1);
 }
 
-void printHollowDiamond(int n)
-{
-  printDiamond(n + 1, n + 1);
+void printHollowDiamond(int n) { printDiamond(n + 1, n + 1); }
+
+// Q3 part 6, recursive pattern
+
+void printStarSpace(int n) {
+  if (n == 0)
+    return;
+  cout << "* ";
+  printStarSpace(n - 1);
 }
 
-int main() {
+void printDots(int n) {
+  if (n == 0)
+    return;
+  cout << ". ";
+  printDots(n - 1);
+}
+
+void PrintPattern2(int a, int b) {
+  if (a == 0)
+    return;
+
+  printSpaces(a * 2);
+  cout << "# ";
+  printDots(a);
+  printStarSpace((b - a) * 2);
+  cout << "| ";
+  printStarSpace((b - a) * 2);
+  printDots(a);
+  cout << "# ";
+  cout << endl;
+
+  PrintPattern2(a - 1, b);
+
+  if (a == 1)
+    return;
+  printSpaces(a * 2);
+  cout << "# ";
+  printDots(a);
+  printStarSpace((b - a) * 2);
+  cout << "| ";
+  printStarSpace((b - a) * 2);
+  printDots(a);
+  cout << "# ";
+  cout << endl;
+}
+
+/* int main() {
   //  Q1: removeSentence, 10 marks
-  /*char *para =
-      "Helpdesk: There is an icon on your computer labeled My Computer.
-  Double " "click on it. User: What's your computer doing on mine?"; char
-  *remove = "Double click on it."; char *tempPara = removeSentence(para,
-  remove); cout
-  << tempPara; delete[] tempPara;
+  char *para = "Helpdesk: There is mine?";
+  char *remove = "There";
+  char *tempPara = removeSentence(para, remove);
+  cout << tempPara;
 
-  // Q1 part 2: Find substring, 10 marks
+// Q1 part 2: Find substring, 10 marks
 
-  char *Str = "affects";
-  char *substr = "sad";
-  int start = 0, end = 0;
-  cout << FindSubString(Str, substr, start, end);
-  cout << "\nstart: " << start << "\nend: " << end;*/
+char *Str = "affects";
+char *substr = "sad";
+int start = 0, end = 0;
+cout << FindSubString(Str, substr, start, end);
+cout << "\nstart: " << start << "\nend: " << end;
 
-  // Q2: Dynamic 3d Array matching, 50 marks
+// Q2: Dynamic 3d Array matching, 50 marks
 
-  /*char arr[28] = "sbtaicztieahrnltagtsjvehfyf";
-  char ***mat = ConvertToDynamic(arr, 3, 3, 4);
-  int **res, col;
-  cout << MatchString3DArray(mat, 3, 3, 4, "tag", res, col);*/
+char arr[28] = "sbtaicztieahrnltagtsjvehfyf";
+char ***mat = ConvertToDynamic(arr, 3, 3, 4);
+int **res, col;
+cout << MatchString3DArray(mat, 3, 3, 4, "tag", res, col);
 
-  // Q3, perfect number
+// Q3, perfect number
 
-  // cout << isperfectNumer(496);
+cout << isperfectNumer(496);
 
-  // Q3 part 2, finding vowels:
+// Q3 part 2, finding vowels:
 
-  /*char* input = "rm -rf /osama/bin/laden";
-  cout << findVowels(input);*/
+char* input = "rm -rf /osama/bin/laden";
+cout << findVowels(input);
 
-  // Q3 part 3, pascal triangle
+// Q3 part 3, pascal triangle
 
-  // cout << pascal(5, 3);
+cout << pascal(5, 3);
 
-  // Q3 part 4, pattern
+// Q3 part 4, pattern
 
-  // PrintPattern1(1, 13);
+PrintPattern1(1, 13);
 
-  // Q3 part 5, hollow diamond
+// Q3 part 5, hollow diamond
 
-  printHollowDiamond(11);
-}
+printHollowDiamond(11);
+
+// Q3 part 6, pattern pattern pattern 2 (pattern)
+
+PrintPattern2(10, 10);
+
+} */
